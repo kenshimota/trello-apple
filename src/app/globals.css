@@ -1,26 +1,217 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ */
+/* Oxide design tokens — dark-first. Light is opt-in via data-theme.  */
+/* ------------------------------------------------------------------ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  /* neutrals (0 darkest → 1300 lightest) */
+  --color-neutral-0: oklch(0.162 0.01 260);
+  --color-neutral-100: oklch(0.2 0.009 260);
+  --color-neutral-200: oklch(0.24 0.008 260);
+  --color-neutral-300: oklch(0.316 0.006 260);
+  --color-neutral-400: oklch(0.4 0.006 260);
+  --color-neutral-500: oklch(0.48 0.006 260);
+  --color-neutral-600: oklch(0.58 0.005 260);
+  --color-neutral-700: oklch(0.68 0.004 260);
+  --color-neutral-800: oklch(0.79 0.0011 260);
+  --color-neutral-900: oklch(0.86 0.002 260);
+  --color-neutral-1000: oklch(0.92 0.002 260);
+  --color-neutral-1300: oklch(0.995 0.0001 260);
+
+  /* accents (800 = canonical anchor) */
+  --color-green-800: oklch(0.77 0.1919 163.7);
+  --color-green-600: oklch(0.6 0.16 163.7);
+  --color-green-1000: oklch(0.88 0.13 163.7);
+  --color-red-800: oklch(0.712 0.185 11.3);
+  --color-red-600: oklch(0.6 0.17 11.3);
+  --color-yellow-800: oklch(0.837 0.14 75);
+  --color-blue-800: oklch(0.71 0.15 272);
+  --color-purple-800: oklch(0.72 0.16 300);
+
+  /* surfaces */
+  --surface-default: var(--color-neutral-0);
+  --surface-raise: var(--color-neutral-200);
+  --surface-secondary: var(--color-neutral-100);
+  --surface-tertiary: var(--color-neutral-300);
+  --surface-hover: oklch(0.28 0.008 260);
+  --surface-disabled: var(--color-neutral-200);
+  --surface-accent: var(--theme-accent);
+  --surface-error: var(--color-red-800);
+  --surface-notice: var(--color-yellow-800);
+  --surface-scrim: oklch(0.162 0.01 260 / 0.8);
+
+  /* content */
+  --content-raise: var(--color-neutral-1000);
+  --content-default: var(--color-neutral-800);
+  --content-secondary: var(--color-neutral-700);
+  --content-tertiary: var(--color-neutral-600);
+  --content-quaternary: var(--color-neutral-500);
+  --content-disabled: var(--color-neutral-400);
+  --content-error: var(--color-red-800);
+  --content-success: var(--color-green-800);
+  --content-notice: var(--color-yellow-800);
+  --content-inverse: var(--color-neutral-0);
+
+  /* stroke */
+  --stroke-default: var(--color-neutral-300);
+  --stroke-raise: oklch(0.42 0.008 260);
+  --stroke-secondary: var(--color-neutral-200);
+  --stroke-tertiary: oklch(0.26 0.006 260);
+  --stroke-error: var(--color-red-800);
+
+  /* themeable accent (default: green) */
+  --theme-accent: var(--color-green-800);
+  --theme-accent-secondary: var(--color-green-600);
+  --theme-accent-hover: var(--color-green-1000);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --surface-default: var(--color-neutral-1300);
+  --surface-raise: oklch(0.975 0.001 260);
+  --surface-secondary: oklch(0.96 0.002 260);
+  --surface-tertiary: oklch(0.94 0.002 260);
+  --surface-hover: oklch(0.93 0.003 260);
+  --surface-disabled: oklch(0.94 0.002 260);
+
+  --content-raise: var(--color-neutral-0);
+  --content-default: var(--color-neutral-300);
+  --content-secondary: var(--color-neutral-400);
+  --content-tertiary: var(--color-neutral-500);
+  --content-quaternary: var(--color-neutral-600);
+  --content-disabled: var(--color-neutral-700);
+  --content-inverse: var(--color-neutral-1300);
+
+  --stroke-default: oklch(0.82 0.003 260);
+  --stroke-raise: oklch(0.7 0.004 260);
+  --stroke-secondary: oklch(0.88 0.002 260);
+  --stroke-tertiary: oklch(0.92 0.002 260);
+}
+
+.green-theme {
+  --theme-accent: var(--color-green-800);
+  --theme-accent-secondary: var(--color-green-600);
+  --theme-accent-hover: var(--color-green-1000);
+}
+.blue-theme {
+  --theme-accent: var(--color-blue-800);
+  --theme-accent-secondary: var(--color-blue-800);
+  --theme-accent-hover: var(--color-blue-800);
+}
+.purple-theme {
+  --theme-accent: var(--color-purple-800);
+  --theme-accent-secondary: var(--color-purple-800);
+  --theme-accent-hover: var(--color-purple-800);
+}
+.red-theme {
+  --theme-accent: var(--color-red-800);
+  --theme-accent-secondary: var(--color-red-600);
+  --theme-accent-hover: var(--color-red-800);
+}
+.yellow-theme {
+  --theme-accent: var(--color-yellow-800);
+  --theme-accent-secondary: var(--color-yellow-800);
+  --theme-accent-hover: var(--color-yellow-800);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --radius-sm: 1px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ------------------------------------------------------------------ */
+/* Semantic utilities                                                  */
+/* ------------------------------------------------------------------ */
+
+@utility bg-default { background-color: var(--surface-default); }
+@utility bg-raise { background-color: var(--surface-raise); }
+@utility bg-secondary { background-color: var(--surface-secondary); }
+@utility bg-tertiary { background-color: var(--surface-tertiary); }
+@utility bg-hover { background-color: var(--surface-hover); }
+@utility bg-disabled { background-color: var(--surface-disabled); }
+@utility bg-accent { background-color: var(--surface-accent); }
+@utility bg-accent-hover { background-color: var(--theme-accent-hover); }
+@utility bg-error { background-color: var(--surface-error); }
+@utility bg-notice { background-color: var(--surface-notice); }
+@utility bg-scrim { background-color: var(--surface-scrim); }
+
+@utility text-raise { color: var(--content-raise); }
+@utility text-default { color: var(--content-default); }
+@utility text-secondary { color: var(--content-secondary); }
+@utility text-tertiary { color: var(--content-tertiary); }
+@utility text-quaternary { color: var(--content-quaternary); }
+@utility text-disabled { color: var(--content-disabled); }
+@utility text-accent { color: var(--theme-accent); }
+@utility text-error { color: var(--content-error); }
+@utility text-success { color: var(--content-success); }
+@utility text-notice { color: var(--content-notice); }
+@utility text-inverse { color: var(--content-inverse); }
+
+@utility border-default { border-color: var(--stroke-default); }
+@utility border-raise { border-color: var(--stroke-raise); }
+@utility border-secondary { border-color: var(--stroke-secondary); }
+@utility border-tertiary { border-color: var(--stroke-tertiary); }
+@utility border-accent { border-color: var(--theme-accent); }
+@utility border-accent-secondary { border-color: var(--theme-accent-secondary); }
+@utility border-error { border-color: var(--stroke-error); }
+
+/* ------------------------------------------------------------------ */
+/* Type utilities — carry optical tracking                             */
+/* ------------------------------------------------------------------ */
+
+@utility text-sans-sm { font-family: var(--font-sans); font-size: 12px; line-height: 1.4; letter-spacing: 0.032em; }
+@utility text-sans-md { font-family: var(--font-sans); font-size: 14px; line-height: 1.45; letter-spacing: 0.024em; }
+@utility text-sans-lg { font-family: var(--font-sans); font-size: 16px; line-height: 1.5; letter-spacing: 0.014em; }
+@utility text-sans-xl { font-family: var(--font-sans); font-size: 18px; line-height: 1.4; letter-spacing: 0.006em; }
+@utility text-sans-2xl { font-family: var(--font-sans); font-size: 25px; line-height: 1.3; letter-spacing: -0.005em; }
+@utility text-sans-3xl { font-family: var(--font-sans); font-size: 36px; line-height: 1.2; letter-spacing: -0.014em; }
+
+@utility text-mono-xs {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.049em;
+  text-transform: uppercase;
 }
+@utility text-mono-sm {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+@utility text-mono-md {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--surface-default);
+  color: var(--content-default);
+  font-family: var(--font-sans);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--theme-accent-secondary);
+  outline-offset: 0;
+}
+
+::selection {
+  background-color: color-mix(in oklch, var(--theme-accent) 35%, transparent);
 }
