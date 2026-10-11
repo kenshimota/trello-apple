@@ -6,15 +6,17 @@ type Color =
   | "blue"
   | "purple"
   | "destructive"
-  | "notice";
+  | "notice"
+  | "success";
 
 const tones: Record<Color, string> = {
-  default: "var(--theme-accent)",
-  neutral: "var(--content-secondary)",
-  blue: "var(--color-blue-800)",
-  purple: "var(--color-purple-800)",
-  destructive: "var(--color-red-800)",
-  notice: "var(--color-yellow-800)",
+  default: "var(--tint)",
+  blue: "var(--tint)",
+  purple: "var(--purple)",
+  destructive: "var(--danger)",
+  notice: "var(--notice)",
+  success: "var(--success)",
+  neutral: "var(--secondary-label)",
 };
 
 export function Badge({
@@ -31,18 +33,18 @@ export function Badge({
   const tone = tones[color];
   const style =
     variant === "solid"
-      ? { backgroundColor: tone, color: "var(--content-inverse)" }
+      ? { backgroundColor: tone, color: "var(--on-tint)" }
       : {
           color: tone,
-          backgroundColor: `color-mix(in oklch, ${tone} 15%, transparent)`,
-          boxShadow: `inset 0 0 0 1px color-mix(in oklch, ${tone} 30%, transparent)`,
+          backgroundColor:
+            color === "neutral" ? "var(--fill)" : `color-mix(in srgb, ${tone} 15%, transparent)`,
         };
 
   return (
     <span
       style={style}
       className={cn(
-        "inline-flex h-5 items-center rounded-sm px-1.5 text-mono-xs tabular-nums",
+        "caption-1 inline-flex h-5 items-center rounded-full px-2 font-medium",
         className,
       )}
     >

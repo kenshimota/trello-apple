@@ -5,16 +5,16 @@ type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "base" | "sm" | "icon";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-accent text-inverse hover:bg-accent-hover",
-  secondary: "bg-secondary text-default border border-default hover:bg-hover",
-  ghost: "bg-transparent text-secondary hover:bg-hover hover:text-default",
-  danger: "bg-error text-inverse hover:brightness-110",
+  primary: "bg-tint text-on-tint hover:brightness-95 active:brightness-90",
+  secondary: "bg-fill text-label hover:brightness-95 active:brightness-90",
+  ghost: "bg-transparent text-tint hover:bg-tint-soft",
+  danger: "bg-danger text-on-tint hover:brightness-95 active:brightness-90",
 };
 
 const sizes: Record<Size, string> = {
-  base: "h-10 px-4",
-  sm: "h-8 px-3",
-  icon: "h-8 w-8",
+  base: "h-11 px-5 text-body",
+  sm: "h-9 px-4 subheadline",
+  icon: "h-9 w-9 rounded-full",
 };
 
 export function buttonStyle({
@@ -27,8 +27,9 @@ export function buttonStyle({
   className?: string;
 } = {}) {
   return cn(
-    "relative inline-flex select-none items-center justify-center gap-2 rounded-md text-mono-sm",
-    "transition-colors duration-150 ease-out active:scale-[0.97] motion-reduce:active:scale-100",
+    "relative inline-flex select-none items-center justify-center gap-2 rounded-sm font-semibold",
+    "transition-[transform,background-color,filter] duration-200 ease-out",
+    "active:scale-[0.97] motion-reduce:active:scale-100",
     variants[variant],
     sizes[size],
     className,
@@ -58,7 +59,7 @@ export function Button({
       disabled={isDisabled}
       className={cn(
         buttonStyle({ variant, size, className }),
-        isDisabled && "pointer-events-none opacity-50",
+        isDisabled && "pointer-events-none opacity-40",
       )}
     >
       {loading ? (

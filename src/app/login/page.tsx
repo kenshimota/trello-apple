@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
-import { Badge } from "@/components/ui/badge";
 import { DEMO_CREDENTIALS } from "@/lib/auth";
 
 type Mode = "signin" | "signup";
@@ -63,19 +62,28 @@ export default function LoginPage() {
   return (
     <main className="flex flex-1 items-center justify-center px-6 py-16">
       <div className="w-full max-w-sm">
-        <div className="mb-8 flex items-center gap-3">
-          <span className="grid h-9 w-9 place-items-center rounded-md bg-accent text-mono-sm text-inverse">
-            ▚
+        <div className="mb-8 flex flex-col items-center text-center">
+          <span className="mb-4 grid h-16 w-16 place-items-center rounded-xl bg-tint text-on-tint shadow-md">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-8 w-8"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10" />
+            </svg>
           </span>
-          <div className="flex flex-col">
-            <span className="text-mono-md text-raise">Gym</span>
-            <span className="text-mono-xs text-tertiary">Organiza tu entrenamiento</span>
-          </div>
+          <h1 className="large-title text-label">Gym</h1>
+          <p className="callout mt-1 text-secondary">
+            Organiza tus días, rutinas y ejercicios.
+          </p>
         </div>
 
-        <div className="rounded-lg border border-default bg-raise p-6">
-          <div className="mb-6 flex gap-1 rounded-md bg-tertiary p-1">
-            <TabButton
+        <div className="rounded-lg bg-card p-6 shadow-md">
+          <div className="mb-6 flex rounded-full bg-fill p-1">
+            <Segment
               active={mode === "signin"}
               onClick={() => {
                 setMode("signin");
@@ -83,8 +91,8 @@ export default function LoginPage() {
               }}
             >
               Iniciar sesión
-            </TabButton>
-            <TabButton
+            </Segment>
+            <Segment
               active={mode === "signup"}
               onClick={() => {
                 setMode("signup");
@@ -92,7 +100,7 @@ export default function LoginPage() {
               }}
             >
               Crear cuenta
-            </TabButton>
+            </Segment>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
@@ -137,7 +145,7 @@ export default function LoginPage() {
             </Field>
 
             {error && (
-              <p className="red-theme text-sans-sm text-error" role="alert">
+              <p className="footnote text-danger" role="alert">
                 {error}
               </p>
             )}
@@ -148,26 +156,24 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <div className="mt-4 flex items-center justify-between gap-2">
-          <span className="text-mono-xs text-quaternary">Cuenta de prueba</span>
+        <div className="mt-5 flex flex-col items-center gap-1">
           <button
             type="button"
             onClick={useDemo}
-            className="text-mono-xs text-accent hover:underline"
+            className="subheadline font-semibold text-tint hover:opacity-70"
           >
-            usar demo
+            Usar cuenta de prueba
           </button>
-        </div>
-        <div className="mt-2 flex items-center gap-2">
-          <Badge color="neutral">{DEMO_CREDENTIALS.email}</Badge>
-          <Badge color="neutral">{DEMO_CREDENTIALS.password}</Badge>
+          <p className="footnote text-tertiary">
+            {DEMO_CREDENTIALS.email} · {DEMO_CREDENTIALS.password}
+          </p>
         </div>
       </div>
     </main>
   );
 }
 
-function TabButton({
+function Segment({
   active,
   onClick,
   children,
@@ -182,8 +188,10 @@ function TabButton({
       onClick={onClick}
       aria-pressed={active}
       className={
-        "flex-1 rounded-sm px-3 py-1.5 text-mono-xs transition-colors " +
-        (active ? "bg-raise text-accent" : "text-tertiary hover:text-default")
+        "flex-1 rounded-full px-3 py-1.5 subheadline transition-colors " +
+        (active
+          ? "bg-card font-semibold text-label shadow-sm"
+          : "text-secondary hover:text-label")
       }
     >
       {children}

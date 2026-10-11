@@ -9,9 +9,9 @@ export function Input({ hasError, className, ...props }: InputProps) {
     <input
       {...props}
       className={cn(
-        "h-10 w-full rounded-md border bg-tertiary px-3 text-sans-md text-raise",
-        "placeholder:text-quaternary transition-colors",
-        hasError ? "border-error" : "border-default focus:border-accent",
+        "h-11 w-full rounded-sm border bg-fill-secondary px-4 text-body text-label",
+        "placeholder:text-placeholder transition-colors",
+        hasError ? "border-danger" : "border-transparent focus:border-tint",
         className,
       )}
     />
@@ -32,17 +32,17 @@ export function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={htmlFor} className="text-mono-xs text-secondary">
+    <div className="flex flex-col gap-1.5">
+      <label htmlFor={htmlFor} className="footnote px-1 text-secondary">
         {label}
       </label>
       {children}
       {error ? (
-        <p className="text-sans-sm text-error" role="alert">
+        <p className="footnote px-1 text-danger" role="alert">
           {error}
         </p>
       ) : hint ? (
-        <p className="text-sans-sm text-tertiary">{hint}</p>
+        <p className="footnote px-1 text-tertiary">{hint}</p>
       ) : null}
     </div>
   );

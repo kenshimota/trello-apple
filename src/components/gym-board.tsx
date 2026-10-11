@@ -137,10 +137,10 @@ export function GymBoard({ userId }: { userId: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center gap-6">
+      <div className="flex flex-wrap items-center gap-8">
         <Stat label="Días" value={stats.days} />
         <Stat label="Ejercicios" value={stats.total} />
-        <Stat label="Completados" value={stats.done} accent />
+        <Stat label="Completados" value={stats.done} tint />
       </div>
 
       <div className="flex gap-4 overflow-x-auto pb-4">
@@ -165,9 +165,9 @@ export function GymBoard({ userId }: { userId: string }) {
         <button
           type="button"
           onClick={addDay}
-          className="h-24 w-72 shrink-0 rounded-lg border border-dashed border-secondary text-mono-sm text-tertiary transition-colors hover:border-accent hover:text-accent"
+          className="h-28 w-72 shrink-0 rounded-lg border border-dashed border-separator subheadline font-semibold text-tint transition-colors hover:bg-tint-soft"
         >
-          + Añadir día
+          Añadir día
         </button>
       </div>
     </div>
@@ -177,23 +177,23 @@ export function GymBoard({ userId }: { userId: string }) {
 function Stat({
   label,
   value,
-  accent = false,
+  tint = false,
 }: {
   label: string;
   value: number;
-  accent?: boolean;
+  tint?: boolean;
 }) {
   return (
-    <div className="flex items-baseline gap-2">
+    <div className="flex flex-col">
       <span
         className={cn(
-          "text-sans-2xl tabular-nums",
-          accent ? "text-accent" : "text-raise",
+          "title-1 tabular-nums",
+          tint ? "text-tint" : "text-label",
         )}
       >
         {value}
       </span>
-      <span className="text-mono-xs text-tertiary">{label}</span>
+      <span className="footnote text-secondary">{label}</span>
     </div>
   );
 }
@@ -220,66 +220,68 @@ function DayColumn({
   onToggle: (id: string) => void;
 }) {
   return (
-    <section className="flex w-72 shrink-0 flex-col gap-3 rounded-lg border border-default bg-raise p-3">
+    <section className="flex w-72 shrink-0 flex-col gap-3 rounded-lg bg-card p-4 shadow-sm">
       <header className="flex items-center gap-2">
         <input
           value={day.name}
           onChange={(e) => onRename(e.target.value)}
           aria-label="Nombre del día"
-          className="min-w-0 flex-1 rounded-sm border border-transparent bg-transparent px-1 py-0.5 text-mono-md text-raise transition-colors hover:border-default focus:border-accent focus:outline-none"
+          className="min-w-0 flex-1 rounded-sm border border-transparent bg-transparent px-1 py-0.5 title-3 text-label transition-colors hover:border-separator focus:border-tint focus:outline-none"
         />
         <Badge color="neutral">{day.exercises.length}</Badge>
         <button
           type="button"
           onClick={onRemoveDay}
           aria-label={`Eliminar ${day.name}`}
-          className="grid h-6 w-6 place-items-center rounded-sm text-tertiary transition-colors hover:bg-hover hover:text-error"
+          className="grid h-7 w-7 place-items-center rounded-full text-tertiary transition-colors hover:bg-fill hover:text-danger"
         >
           ×
         </button>
       </header>
 
-      <div className="flex flex-col gap-2">
-        {day.exercises.map((exercise) => (
-          <article
-            key={exercise.id}
-            className="group flex items-start gap-2 rounded-md border border-secondary bg-secondary p-2.5"
-          >
-            <Checkbox
-              checked={exercise.done}
-              onChange={() => onToggle(exercise.id)}
-              label={exercise.name}
-            />
-            <div className="flex min-w-0 flex-1 flex-col">
-              <span
-                className={cn(
-                  "text-sans-md",
-                  exercise.done ? "text-tertiary line-through" : "text-raise",
-                )}
-              >
-                {exercise.name}
-              </span>
-              <span className="text-mono-xs text-tertiary">
-                {exercise.sets} × {exercise.reps}
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => onRemoveExercise(exercise.id)}
-              aria-label={`Eliminar ${exercise.name}`}
-              className="grid h-6 w-6 place-items-center rounded-sm text-quaternary opacity-0 transition-opacity hover:bg-hover hover:text-error focus-visible:opacity-100 group-hover:opacity-100"
+      {day.exercises.length > 0 && (
+        <div className="overflow-hidden rounded-md border border-separator">
+          {day.exercises.map((exercise) => (
+            <article
+              key={exercise.id}
+              className="group flex items-start gap-3 border-b border-separator bg-card p-3 last:border-b-0"
             >
-              ×
-            </button>
-          </article>
-        ))}
+              <Checkbox
+                checked={exercise.done}
+                onChange={() => onToggle(exercise.id)}
+                label={exercise.name}
+              />
+              <div className="flex min-w-0 flex-1 flex-col">
+                <span
+                  className={cn(
+                    "headline",
+                    exercise.done ? "text-tertiary line-through" : "text-label",
+                  )}
+                >
+                  {exercise.name}
+                </span>
+                <span className="caption-1 text-secondary tabular-nums">
+                  {exercise.sets} × {exercise.reps}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => onRemoveExercise(exercise.id)}
+                aria-label={`Eliminar ${exercise.name}`}
+                className="grid h-7 w-7 place-items-center rounded-full text-tertiary opacity-0 transition-opacity hover:bg-fill hover:text-danger focus-visible:opacity-100 group-hover:opacity-100"
+              >
+                ×
+              </button>
+            </article>
+          ))}
+        </div>
+      )}
 
-        {day.exercises.length === 0 && !adding && (
-          <p className="rounded-md border border-dashed border-secondary px-3 py-6 text-center text-sans-sm text-quaternary">
-            Sin ejercicios
-          </p>
-        )}
-      </div>
+      {day.exercises.length === 0 && !adding && (
+        <p className="rounded-md bg-fill-secondary px-3 py-6 text-center subheadline text-tertiary">
+          Sin ejercicios
+        </p>
+      )}
 
       {adding ? (
         <AddExerciseForm onAdd={onAddExercise} onCancel={onCancelAdd} />
@@ -287,9 +289,9 @@ function DayColumn({
         <button
           type="button"
           onClick={onStartAdd}
-          className="rounded-md px-3 py-2 text-left text-mono-xs text-tertiary transition-colors hover:bg-hover hover:text-accent"
+          className="rounded-md px-3 py-2 text-left subheadline font-semibold text-tint transition-colors hover:bg-tint-soft"
         >
-          + Añadir ejercicio
+          Añadir ejercicio
         </button>
       )}
     </section>
@@ -370,19 +372,21 @@ function Checkbox({
       <span
         aria-hidden
         className={cn(
-          "grid h-4 w-4 shrink-0 place-items-center rounded-sm border transition-colors",
-          "peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--theme-accent-secondary)]",
+          "grid h-6 w-6 shrink-0 place-items-center rounded-full border transition-colors",
+          "peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--tint)]",
           checked
-            ? "border-accent bg-accent text-inverse"
-            : "border-raise text-transparent hover:border-accent",
+            ? "border-tint bg-tint text-on-tint"
+            : "border-separator text-transparent hover:border-tint",
         )}
       >
         <svg
-          viewBox="0 0 10 10"
-          className="h-2.5 w-2.5 fill-none stroke-current"
+          viewBox="0 0 12 12"
+          className="h-3.5 w-3.5 fill-none stroke-current"
           strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          <path d="M1.5 5.2 4 7.5 8.5 2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M2 6.2 4.8 9 10 3" />
         </svg>
       </span>
     </label>
